@@ -10,4 +10,4 @@ git+https://github.com/rmcpantoja/googletrans.git
 numpy
 onnxruntime==1.14.1
 git+https://github.com/mush42/espeak-phonemizer-windows
-sounddevice
+git+https://github.com/accessibleapps/sound_lib

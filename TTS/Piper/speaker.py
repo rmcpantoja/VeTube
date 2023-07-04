@@ -1,8 +1,10 @@
 import logging
 from functools import partial
 from pathlib import Path
-import sounddevice as sd
+from sound_lib import stream
+from sound_lib import output
 from . import Piper
+o = output.Output()
 
 class piperSpeak:
 	def __init__(self, model_path):
@@ -13,11 +15,13 @@ class piperSpeak:
 		self.noise_w = 0.8
 		self.synthesize = None
 		self.voice = None
+		self.audio_stream=None
 
 	def load_model(self):
 		if self.voice:
 			return self.voice
 		self.voice = Piper(self.model_path)
+		self.audio_stream=stream.PushStream(freq=self.voice.config.sample_rate, chans=1)
 
 	def set_rate(self, new_scale):
 		self.length_scale = new_scale
@@ -45,4 +49,6 @@ class piperSpeak:
 			self.noise_scale,
 			self.noise_w
 		)
-		sd.play(audio_norm, sample_rate)
+		self.audio_stream.stop()
+		self.audio_stream.push(audio_norm)
+		self.audio_stream.play()
