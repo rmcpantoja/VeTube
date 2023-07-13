@@ -6,7 +6,8 @@ from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import piper_list_voices, install_piper_voice
 from TTS.Piper import Piper, speaker
 from os import path
-from playsound import playsound
+from sound import playsound
+player = playsound()
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
 
@@ -164,7 +165,7 @@ class configuracionDialog(wx.Dialog):
 		sizer_soniditos.Add(self.check_2)
 		sizer_soniditos.Add(self.soniditos, 1, wx.EXPAND)
 		self.reproducir= wx.Button(self.treeItem_4, wx.ID_ANY, _("&Reproducir"))
-		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
+		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
 		if config['sonidos']: self.reproducir.Enable()
 		else: self.reproducir.Disable()
 		sizer_soniditos.Add(self.reproducir)

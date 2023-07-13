@@ -2,7 +2,9 @@
 # -*- coding: <encoding name> -*-
 import json,wx,wx.adv,threading,languageHandler,restart,translator,time,funciones,google_currency,fajustes,ajustes
 from keyboard_handler.wx_handler import WXKeyboardHandler
-from playsound import playsound
+from sound import playsound
+player = playsound()
+player.setdevice(2)
 from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import install_piper_voice
 from yt_dlp import YoutubeDL
@@ -411,7 +413,7 @@ class MyFrame(wx.Frame):
 				self.dialog_mensaje.SetSizerAndFit(sizer_mensaje_1)
 				self.dialog_mensaje.Centre()
 				self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
-				if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
+				if config['sonidos'] and config['listasonidos'][6]: player.playsound(ajustes.rutasonidos[6],False)
 				leer.speak(_("Ingresando al chat."))
 				self.hilo2 = threading.Thread(target=self.iniciarChat)
 				self.hilo2.daemon = True
@@ -734,11 +736,11 @@ class MyFrame(wx.Frame):
 		self.text_message.SetFocus()
 	def reproducirMsg(self):
 		if lista[yt][0]=='General':
-			if self.list_box_1.GetSelection()==0 or self.list_box_1.GetSelection()==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
-			else: playsound("sounds/msj.mp3",False)
+			if self.list_box_1.GetSelection()==0 or self.list_box_1.GetSelection()==self.list_box_1.GetCount()-1: player.playsound("sounds/orilla.mp3",False)
+			else: player.playsound("sounds/msj.mp3",False)
 		else:
-			if pos[yt]<=1 or pos[yt]==len(lista[yt])-1: playsound("sounds/orilla.mp3",False)
-			else: playsound("sounds/msj.mp3",False)
+			if pos[yt]<=1 or pos[yt]==len(lista[yt])-1: player.playsound("sounds/orilla.mp3",False)
+			else: player.playsound("sounds/msj.mp3",False)
 	def addFavoritos(self, event):
 		if self.list_favorite.GetStrings()==[_("Tus favoritos aparecerán aquí")]: self.list_favorite.Delete(0)
 		if len(favorite)<=0:
@@ -809,7 +811,7 @@ class MyFrame(wx.Frame):
 							if lista[contador][0]=='Miembros':
 								lista[contador].append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
 								break
-						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 					self.list_box_1.Append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
 				if lista[yt][0]=='Miembros':
 					if config['reader']:
@@ -823,7 +825,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Moderadores':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: playsound(ajustes.rutasonidos[7],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[7],False)
 						self.list_box_1.Append(_('Propietario ')+message['author']['name'] +': ' +message['message'])
 						if lista[yt][0]=='Moderadores':
 							if config['reader']:
@@ -835,7 +837,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Moderadores':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: playsound(ajustes.rutasonidos[4],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[4],False)
 						self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
 						if lista[yt][0]=='Moderadores':
 							if config['reader']:
@@ -847,7 +849,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Miembros':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: playsound(ajustes.rutasonidos[1],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(ajustes.rutasonidos[1],False)
 						self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
 						if lista[yt][0]=='Miembros':
 							if config['reader']:
@@ -859,7 +861,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Usuarios Verificados':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: playsound(ajustes.rutasonidos[5],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: player.playsound(ajustes.rutasonidos[5],False)
 						self.list_box_1.Append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
 						if lista[yt][0]=='Usuarios Verificados':
 							if config['reader']:
@@ -876,7 +878,7 @@ class MyFrame(wx.Frame):
 						if lista[contador][0]=='Donativos':
 							lista[contador].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
 							break
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: player.playsound(ajustes.rutasonidos[3],False)
 				self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
 				if lista[yt][0]=='Donativos':
 					if config['reader']:
@@ -888,7 +890,7 @@ class MyFrame(wx.Frame):
 						if config['reader']:
 							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
 							else: lector.speak(message['author']['name'] +': ' +message['message'])
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
 					exit()
@@ -934,7 +936,7 @@ class MyFrame(wx.Frame):
 						if lista[contador][0]=='Donativos':
 							lista[contador].append(dinero+', '+message['author']['name']+': '+divide1)
 							break
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: player.playsound(ajustes.rutasonidos[3],False)
 				self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide1)
 				if lista[yt][0]=='Donativos':
 					if config['reader']:
@@ -947,7 +949,7 @@ class MyFrame(wx.Frame):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
 							break
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				self.list_box_1.Append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
 				if lista[yt][0]=='Miembros':
 					if config['reader']:
@@ -960,7 +962,7 @@ class MyFrame(wx.Frame):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
 							break
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				self.list_box_1.Append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
 				if lista[yt][0]=='Miembros':
 					if config['reader']:
@@ -973,7 +975,7 @@ class MyFrame(wx.Frame):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
 							break
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				self.list_box_1.Append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
 				if lista[yt][0]=='Miembros':
 					if config['reader']:
@@ -988,7 +990,7 @@ class MyFrame(wx.Frame):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
 							break
-					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
 				if lista[yt][0]=='Miembros':
 					if config['reader']:
@@ -1003,7 +1005,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Moderadores':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: playsound(ajustes.rutasonidos[4],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[4],False)
 						if lista[yt][0]=='Moderadores':
 							if config['reader']:
 								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
@@ -1014,7 +1016,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Miembros':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: playsound(ajustes.rutasonidos[1],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(ajustes.rutasonidos[1],False)
 						if lista[yt][0]=='Miembros':
 							if config['reader']:
 								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
@@ -1025,7 +1027,7 @@ class MyFrame(wx.Frame):
 								if lista[contador][0]=='Usuarios Verificados':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: playsound(ajustes.rutasonidos[5],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: player.playsound(ajustes.rutasonidos[5],False)
 						if lista[yt][0]=='Usuarios Verificados':
 							if config['reader']:
 								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
@@ -1035,7 +1037,7 @@ class MyFrame(wx.Frame):
 							if config['reader']:
 								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
 								else: lector.speak(message['author']['name'] +': ' +message['message'])
-							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+							if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 						self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 			else:
 				if self.dentro:
@@ -1043,7 +1045,7 @@ class MyFrame(wx.Frame):
 						if config['reader']:
 							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
 							else: lector.speak(message['author']['name'] +': ' +message['message'])
-						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
 					exit()
@@ -1080,7 +1082,7 @@ class MyFrame(wx.Frame):
 				return
 			else: lista[contador].append(lista[yt][pos[yt]])
 		lector.speak(_('Se agregó el elemento a la lista de favoritos...'))
-	def reproducirSonidos(self,event): playsound(ajustes.rutasonidos[self.soniditos.GetFocusedItem()], False)
+	def reproducirSonidos(self,event): player.playsound(ajustes.rutasonidos[self.soniditos.GetFocusedItem()], False)
 	def iniciarBusqueda(self):
 		self.my_dialog = wx.Dialog(self, wx.ID_ANY, _("escriba el término de su búsqueda"))
 		sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
@@ -1111,7 +1113,7 @@ class MyFrame(wx.Frame):
 				pos.pop()
 				wx.MessageBox(_("No hay ningún criterio de búsqueda que coincida con el término ingresado."), _("información"), wx.ICON_INFORMATION)
 			else:
-				if listasonidos[8]: playsound(ajustes.rutasonidos[8],False)
+				if listasonidos[8]: player.playsound(ajustes.rutasonidos[8],False)
 				leer.speak(_("se encontraron %s resultados") % str(len(lista[-1])-1))
 		else:
 			wx.MessageBox(_("No hay nada que buscar porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
