@@ -9,3 +9,4 @@ for i, name in enumerate(device_names):
 	print(f"Dispositivo establecido: {device_names[i-1]}")
 	file_to_play = "sounds/abrirchat.wav"
 	ps.playsound(file_to_play, True)
+	print("reproducido el sonido en el dispositivo {device_names[i-1]}.")
