@@ -1,0 +1,58 @@
+name: VeTube-x64
+
+on:
+  push:
+    tags: ["*"]
+    branches: [ master , piper ]
+  pull_request:
+    branches: [ master , piper ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Source checkout
+        uses: actions/checkout@v3
+
+      - name: Configure Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11.4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip espeak-ng
+          pip install --upgrade pip wheel setuptools
+          pip install -r requirements.txt
+          pip install espeak-phonemizer pyinstaller gdown httpx httpcore future
+
+      - name: Compiling
+        run: |
+          pyinstaller VeTube.py --windowed
+          gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
+          cp -R chat_downloader dist/VeTube/
+          cp -R doc dist/VeTube/
+          cp -R locales dist/VeTube/
+          cp -R sounds dist/VeTube/
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: VeTube-x64
+          path: dist/VeTube
+          if-no-files-found: error
+
+      - name: zip packaging
+        run: |
+          cd dist/VeTube
+          7z a ../../VeTube-x64.zip .
+          cd ../../
+
+      - name: vetube_release
+        uses: softprops/action-gh-release@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        with:
+          files: VeTube-x64.zip
+          prerelease: ${{ contains(github.ref, '-') }}
